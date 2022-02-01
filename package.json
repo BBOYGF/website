@@ -1,7 +1,7 @@
 {
   "name": "website",
   "version": "1.0.0",
-  "description": "A Vue.js project",
+  "description": "前端基础框架",
   "author": "fan <664130988@qq.com>",
   "private": true,
   "scripts": {

@@ -5,7 +5,7 @@
         <div class="title">我的机器人</div>
         <el-dropdown @command="handleCommand">
           <span class="el-dropdown-link">
-            {{ user.username }} <i><img src="../assets/favicon.png"></i>
+            {{ user.username }} <i><img src="../assets/favicon.png" alt=""></i>
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="个人中心">个人中心</el-dropdown-item>
@@ -29,11 +29,11 @@
           </el-menu>
         </el-aside>
         <el-main>
-          <el-breadcrumb separator-class="el-icon-arrow-right" v-if="this.$router.currentRoute.path!='/home'">
+          <el-breadcrumb separator-class="el-icon-arrow-right" v-if="this.$router.currentRoute.path!=='/home'">
             <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
             <el-breadcrumb-item>{{ this.$router.currentRoute.name }}</el-breadcrumb-item>
           </el-breadcrumb>
-          <div class="homwWelcome" v-if="this.$router.currentRoute.path=='/home'">欢迎来到我的系统</div>
+          <div class="homwWelcome" v-if="this.$router.currentRoute.path==='/home'">欢迎来到我的系统</div>
           <router-view class="homeRouterView"/>
         </el-main>
       </el-container>

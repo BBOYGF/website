@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <el-form ref="loginFrom" :model="loginForm" :rules="rules" class="loginContainer"
+    <el-form ref="loginFrom" :model="loginForm" :rules="rules" class="loginContainer" :class="{hide:!wechatLogin}"
              v-loading="loading"
              element-loading-text="正在登录。。。"
              element-loading-spinner="el-icon-loading"
@@ -20,6 +20,10 @@
       <el-checkbox label="记住密码" name="type" v-model="checked" class="loginChenkbox"></el-checkbox>
       <el-button type="primary" @click="submitLogin" style="width: 100%">登录</el-button>
     </el-form>
+    <div class="wechatLogin " :class="{hide:wechatLogin}">
+      <img src="../assets/favicon.png">
+    </div>
+    <el-button type="primary" @click="switchLogin" style="margin: 10px">{{ loginType }}</el-button>
   </div>
 </template>
 
@@ -40,7 +44,9 @@ export default {
         username: [{required: true, message: '请输入用户名', trigger: 'blur'}],
         password: [{required: true, message: '请输入密码', trigger: 'blur'}],
         code: [{required: true, message: '请输入验证码', trigger: 'blur'}]
-      }
+      },
+      wechatLogin: false,
+      loginType: '微信登录'
     }
   },
   methods: {
@@ -76,6 +82,15 @@ export default {
     updateCaptcha () {
       this.$message('获取验证码！')
       this.captchaUrl = '/captcha?time=' + new Date()
+    },
+    switchLogin () {
+      this.$message('切换登录')
+      if (this.wechatLogin) {
+        this.loginType = '切换账号登录'
+      } else {
+        this.loginType = '切换微信登录'
+      }
+      this.wechatLogin = !this.wechatLogin
     }
   }
 }
@@ -84,7 +99,7 @@ export default {
 <style>
 .loginContainer {
   border-radius: 15px;
-  /*background-clip: padding-box;*/
+  background-clip: padding-box;
   width: 350px;
   padding: 15px 25px 15px 35px;
   border: 1px solid #eeeeee;
@@ -113,8 +128,41 @@ export default {
   background-repeat: no-repeat;
   background-size: cover;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
+
+.wechatLogin {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 15px;
+  /*background-clip: padding-box;*/
+  width: 350px;
+  padding: 15px 25px 15px 35px;
+  border: 1px solid #eeeeee;
+  box-shadow: 0 0 25px #cac6c6;
+  background: rgba(255, 255, 255, 0.96);
+}
+
+.wechatLogin img {
+  width: 250px;
+  height: 290px;
+  background-size: cover;
+}
+
+.main button {
+  padding: 5px;
+  border: none;
+  width: 100px;
+  color: #eeeeee;
+  border-radius: 5px;
+  background: #0281b6;
+}
+.hide {
+  display: none;
+}
+
 </style>
