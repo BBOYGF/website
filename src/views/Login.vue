@@ -1,17 +1,25 @@
 <template>
   <div class="main">
-    <div class="login" v-bind:class="{hide: !isShow}">
-      <h2>登录</h2>
-      <input type="text" placeholder="账号">
-      <input type="password" placeholder="密码">
-      <button>登录</button>
-      <p @click="myClick">《{{ buttonContent }}》</p>
-    </div>
-    <div class="weChatLogin"  v-bind:class="{hide: isShow}">
-      <h2>微信登录</h2>
-      <div class="weChatImage"></div>
-      <p @click="myClick">《{{ buttonContent }}》</p>
-    </div>
+    <el-form ref="loginFrom" :model="loginForm" :rules="rules" class="loginContainer"
+             v-loading="loading"
+             element-loading-text="正在登录。。。"
+             element-loading-spinner="el-icon-loading"
+             element-loading-background="rgba(0, 0, 0, 0.8)">
+      <h3 class="loginTitle">系统登录</h3>
+      <el-form-item prop="username">
+        <el-input type="text" v-model="loginForm.username" placeholder="请输入用户名" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item prop="password">
+        <el-input type="password" v-model="loginForm.password" placeholder="请输入密码" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item prop="code">
+        <el-input type="text" auto-complete="false" v-model="loginForm.code" placeholder="点击图片更换验证码"
+                  style="width:250px;margin: 5px" @keydown.enter.native="submitLogin"></el-input>
+        <img :src="captchaUrl" @click="updateCaptcha">
+      </el-form-item>
+      <el-checkbox label="记住密码" name="type" v-model="checked" class="loginChenkbox"></el-checkbox>
+      <el-button type="primary" @click="submitLogin" style="width: 100%">登录</el-button>
+    </el-form>
   </div>
 </template>
 
@@ -20,118 +28,93 @@ export default {
   name: 'login',
   data () {
     return {
-      isShow: true,
-      buttonContent: '账号登录'
+      captchaUrl: '/captcha?time=' + new Date(),
+      loginForm: {
+        username: 'admin',
+        password: '123',
+        code: ''
+      },
+      loading: false,
+      checked: true,
+      rules: {
+        username: [{required: true, message: '请输入用户名', trigger: 'blur'}],
+        password: [{required: true, message: '请输入密码', trigger: 'blur'}],
+        code: [{required: true, message: '请输入验证码', trigger: 'blur'}]
+      }
     }
   },
   methods: {
-    myClick () {
-      this.isShow = !this.isShow
-      if (this.isShow) {
-        this.buttonContent = '微信登录'
-      } else {
-        this.buttonContent = '账号登录'
-      }
+    submitLogin () {
+      this.$refs.loginFrom.validate((valid) => {
+        if (valid) {
+          this.loading = true
+          this.postRequest('/login', this.loginForm).then(resp => {
+            if (resp) {
+              const tokenStr = resp.obj.tokenHead + resp.obj.token
+              window.sessionStorage.setItem('tokenStr', tokenStr)
+              // 跳转首页
+              let path = this.$route.query.redirect
+              console.log('path是：' + path)
+              console.log('this.$router是：' + this.$router.replace('/home'))
+              console.log('path === undefined：' + (typeof (path) == 'undefined'))
+              this.$router.replace((path === '/' || typeof (path) == 'undefined') ? '/home' : path).catch(err => {
+                    console.log('发生了异常' + err)
+                    this.$router.replace('/home')
+                  }
+              )
+            }
+            this.loading = false
+          })
+        } else {
+          console.log('error submit!!')
+          this.$message.error('请输入所有字段！')
+          this.loading = false
+          return false
+        }
+      })
+    },
+    updateCaptcha () {
+      this.$message('获取验证码！')
+      this.captchaUrl = '/captcha?time=' + new Date()
     }
   }
 }
 </script>
 
-<style scoped>
-.main {
-  width: 100%;
-  height: 100vh;
-  border-color: black;
+<style>
+.loginContainer {
+  border-radius: 15px;
+  /*background-clip: padding-box;*/
+  width: 350px;
+  padding: 15px 25px 15px 35px;
+  border: 1px solid #eeeeee;
+  box-shadow: 0 0 25px #cac6c6;
+  background: rgba(255, 255, 255, 0.96);
+}
+
+.loginTitle {
+  margin: 20px auto 40px auto;
+  text-align: center;
+}
+
+.loginChenkbox {
+  text-align: left;
+  margin: 0px 0px 15px 0px;
+}
+
+.el-form-item__content {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
-  flex-wrap: wrap;
+}
+
+.main {
+  height: 100vh;
   background-image: url("../assets/login_image.jpg");
   background-repeat: no-repeat;
   background-size: cover;
-}
-
-.login {
-  text-align: center;
-  width: 300px;
-  height: 250px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
-  margin: 200px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.62);
-}
-
-.login h2 {
-  margin-bottom: 10px;
-  color: #000000;
-  letter-spacing: 20px;
-}
-
-.login input {
-  height: 30px;
-  border-radius: 3px;
-  /* 缩进15像素 */
-  text-indent: 15px;
-  outline: none;
-  border: none;
-  margin-bottom: 20px;
-  margin-left: 40px;
-  margin-right: 40px;
-}
-
-.login button {
-  height: 30px;
-  border-radius: 3px;
-  /* 缩进15像素 */
-  outline: none;
-  border: none;
-  margin-bottom: 20px;
-  margin-left: 40px;
-  margin-right: 40px;
-  background: #1650e5;
-  text-decoration-color: white;
-  color: white;
-  font-weight: bold;
-}
-
-.login p {
-  text-decoration: underline;
-}
-
-.weChatLogin {
-  text-align: center;
-  width: 300px;
-  height: 250px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin: 200px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.62);
-}
-
-.weChatLogin p {
-  text-align: center;
-  text-decoration: underline;
-}
-.weChatImage {
-  width: 200px;
-  height: 200px;
-  margin-right: 50px;
-  margin-left: 50px;
-  background-image: url("../assets/背景.jpg");
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-.weChatLogin h2 {
-  text-align: center;
-  color: black;
-}
-
-.hide {
-  display: none;
+  align-items: center;
 }
 </style>
