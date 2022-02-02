@@ -20,10 +20,10 @@
       <el-checkbox label="记住密码" name="type" v-model="checked" class="loginChenkbox"></el-checkbox>
       <el-button type="primary" @click="submitLogin" style="width: 100%">登录</el-button>
     </el-form>
-    <div class="wechatLogin " :class="{hide:wechatLogin}">
-      <img src="../assets/favicon.png">
+    <div class="wechatLogin" :class="{hide:wechatLogin}">
+      <img :src=wechatImageUrl @click="updateWeChatImg">
     </div>
-    <el-button type="primary" @click="switchLogin" style="margin: 10px">{{ loginType }}</el-button>
+    <el-button type="primary" @click="switchLogin" style="margin: 10px;width: 200px" >{{ loginType }} </el-button>
   </div>
 </template>
 
@@ -46,7 +46,8 @@ export default {
         code: [{required: true, message: '请输入验证码', trigger: 'blur'}]
       },
       wechatLogin: false,
-      loginType: '微信登录'
+      loginType: '微信登录',
+      wechatImageUrl: '/admin/getLoginWeChat?time=' + new Date()
     }
   },
   methods: {
@@ -82,6 +83,10 @@ export default {
     updateCaptcha () {
       this.$message('获取验证码！')
       this.captchaUrl = '/captcha?time=' + new Date()
+    },
+    updateWeChatImg () {
+      this.$message('获取二维码！')
+      this.wechatImageUrl = '/admin/getLoginWeChat?time=' + new Date()
     },
     switchLogin () {
       this.$message('切换登录')
