@@ -13,8 +13,8 @@
     </div>
     <div class="admin-container">
       <el-card class="admin-card" v-for="(admin,index) in admins" :key="index">
-        <template #header>
-          <div class="card-header">
+        <template #header >
+          <div class="card-header" >
             <span>{{ admin.name }}</span>
             <el-button type="text" style="float: right ;color: red;padding: 3px" icon="el-icon-delete"
                        @click="deleteById(admin)"></el-button>
@@ -67,7 +67,7 @@
         </div>
       </el-card>
 
-      <el-card class="admin-card">
+      <el-card class="admin-card-add">
         <svg class="icon" width="200" height="200" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"
              data-v-042ca774="">
           <path fill="currentColor"
@@ -202,7 +202,6 @@ export default {
   height: 400px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
 }
 
 .userFace {
@@ -214,5 +213,15 @@ export default {
 .userinfo-container {
   font-size: 12px;
   color: #0281b6;
+}
+.admin-card-add{
+  margin-left: 10px;
+  margin-top: 10px;
+  width: 300px;
+  height: 400px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 </style>
