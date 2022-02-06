@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <el-form ref="loginFrom" :model="loginForm" :rules="rules" class="loginContainer" :class="{hide:!wechatLogin}"
+    <el-form ref="loginFrom" :model="loginForm" :rules="rules" class="loginContainer" :class="{hide:wechatLogin}"
              v-loading="loading"
              element-loading-text="正在登录。。。"
              element-loading-spinner="el-icon-loading"
@@ -20,7 +20,7 @@
       <el-checkbox label="记住密码" name="type" v-model="checked" class="loginChenkbox"></el-checkbox>
       <el-button type="primary" @click="submitLogin" style="width: 100%">登录</el-button>
     </el-form>
-    <div class="wechatLogin" :class="{hide:wechatLogin}">
+    <div class="wechatLogin" :class="{hide:!wechatLogin}">
       <img :src=wechatImageUrl @click="updateWeChatImg">
     </div>
     <el-button type="primary" @click="switchLogin" style="margin: 10px;width: 200px" >{{ loginType }} </el-button>
@@ -46,7 +46,7 @@ export default {
         code: [{required: true, message: '请输入验证码', trigger: 'blur'}]
       },
       wechatLogin: false,
-      loginType: '微信登录',
+      loginType: '切换登录',
       wechatImageUrl: '/admin/getLoginWeChat?time=' + new Date()
     }
   },
@@ -91,9 +91,9 @@ export default {
     switchLogin () {
       this.$message('切换登录')
       if (this.wechatLogin) {
-        this.loginType = '切换账号登录'
-      } else {
         this.loginType = '切换微信登录'
+      } else {
+        this.loginType = '切换账号登录'
       }
       this.wechatLogin = !this.wechatLogin
     }

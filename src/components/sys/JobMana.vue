@@ -166,7 +166,7 @@ export default {
     }
   },
   mounted() {
-    this.initJob()
+    // this.initJob()
   },
   methods: {
     //初始化

@@ -9,6 +9,7 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^0.2.6",
     "axios": "^0.21.1",
     "core-js": "^2.6.5",
     "element-ui": "^2.15.2",

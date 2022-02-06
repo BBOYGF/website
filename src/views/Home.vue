@@ -53,7 +53,9 @@ export default {
   },
   computed: {
     routes () {
+      document.title='Base APP'
       return this.$store.state.routes
+
     }
   },
   methods: {
