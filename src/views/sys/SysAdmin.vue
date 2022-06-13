@@ -98,19 +98,19 @@ export default {
       let change = false
       let roles = []
       Object.assign(roles, admin.roles)
-      if (roles.length != this.selectedRoles.length) {
+      if (roles.length !== this.selectedRoles.length) {
         change = true
       } else {
         for (let i = 0; i < roles.length; i++) {
           let role = roles[i]
           for (let j = 0; j < this.selectedRoles.length; j++) {
-            if (role.id == this.selectedRoles[j]) {
+            if (role.id === this.selectedRoles[j]) {
               role.splice(i, 1)
               i--
               break
             }
           }
-          if (roles.length != 0) {
+          if (roles.length !== 0) {
             change = true
           }
         }

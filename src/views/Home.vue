@@ -16,13 +16,13 @@
       </el-header>
       <el-container>
         <el-aside :width='asideWidth'>
-          <el-menu router unique-opened  :collapse=fold @onclick="testOpen">
+          <el-menu router unique-opened :collapse=fold>
             <el-submenu :index="index+''" v-for="(item,index) in routes" :key="index" v-if="!item.hidden">
-              <template slot="title">
-                <i :class="item.iconCls" style="color: #0281b6 ;margin-right: 5px"></i>
-                <span>{{ item.name }}</span>
+              <template slot="title" >
+                <i :class="item.iconCls" style="color: #0281b6 ;margin-right: 5px; " ></i>
+                <span  style="vertical-align: top">{{ item.name }}</span>
               </template>
-              <el-menu-item :index="children.path" v-for="(children,indexj) in item.children" :key="indexj">
+              <el-menu-item :index="children.path" v-for="(children,indexj) in item.children" :key="indexj" style="vertical-align: top">
                 {{ children.name }}
               </el-menu-item>
             </el-submenu>
@@ -33,7 +33,7 @@
             <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
             <el-breadcrumb-item>{{ this.$router.currentRoute.name }}</el-breadcrumb-item>
           </el-breadcrumb>
-          <div class="homwWelcome" v-if="this.$router.currentRoute.path==='/home'">欢迎来到我的系统</div>
+          <div class="homeWelcome" v-if="this.$router.currentRoute.path==='/home'">欢迎来到我的系统</div>
           <router-view class="homeRouterView"/>
         </el-main>
       </el-container>
@@ -53,7 +53,7 @@ export default {
   },
   computed: {
     routes () {
-      document.title='Base APP'
+      document.title = 'Base APP'
       return this.$store.state.routes
 
     }
@@ -83,11 +83,7 @@ export default {
         })
       }
     },
-    testOpen () {
-      console.log('是打开？')
-      this.fold = !this.fold
-      this.asideWidth = 70
-    }
+
   }
 }
 
