@@ -30,7 +30,10 @@ router.beforeEach((to, from, next) => {
   } else {
     if (to.path === '/') {
       next()
-    } else {
+    } else if(to.path === '/order'){
+      next()
+    }
+    else {
       next('/?redirect=' + to.path)
     }
   }

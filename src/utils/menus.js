@@ -26,7 +26,7 @@ export const formatRoutes = (routes) => {
       iconCls,
       children
     } = router
-    // 递归生成 Childern
+    // 递归生成 Children
     if (children && children instanceof Array) {
       children = formatRoutes(children)
     }

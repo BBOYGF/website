@@ -53,9 +53,8 @@ export default {
   },
   computed: {
     routes () {
-      document.title = 'Base APP'
+      document.title = 'Base Web Page'
       return this.$store.state.routes
-
     }
   },
   methods: {
